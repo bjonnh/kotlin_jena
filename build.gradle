@@ -1,0 +1,39 @@
+buildscript {
+    ext.kotlin_version = '1.2.21'
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+apply plugin: 'java'
+apply plugin: 'kotlin'
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    compile 'org.apache.jena:jena-core:3.6.0'
+    compile 'org.apache.jena:jena-base:3.6.0'
+    compile 'org.apache.jena:jena-tdb:3.6.0'
+    compile 'org.apache.jena:jena-tdb2:3.6.0'
+    compile 'org.apache.jena:jena-arq:3.6.0'
+    compile 'org.apache.jena:jena-rdfconnection:3.6.0'
+    implementation('org.apache.jena:jena-querybuilder:3.6.0') {
+        exclude group: 'org.apache.jena', module: 'apache-jena-libs'
+    }
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'demo.MainKt'
+    }
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+}
